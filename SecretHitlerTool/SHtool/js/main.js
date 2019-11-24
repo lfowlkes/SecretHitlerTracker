@@ -12,6 +12,7 @@ var game = new Phaser.Game(config);
 
 var libCount = 6; //default count of liberal cards
 var facCount = 11; //default count of facist cards
+var total = libCount + facCount;
 var libCountB = 6; //counter for conflict
 var facCountB = 11;
 var libBoard = 0; //# liberal cards in play on the board
@@ -26,6 +27,7 @@ preload: function() {
     game.load.image('lcardglo', 'assets/img/liberalcardglow.png');
     game.load.image('gamelogbg', 'assets/img/gamelogbg.png');
     game.load.image('arrow', 'assets/img/arrow.png');
+    game.load.image('confirm', 'assets/img/confirmbutton.png');
     
     
 },
@@ -41,6 +43,7 @@ create: function() {
     game.stage.backgroundColor = '#eddca4';
     logbg = game.add.sprite(750, 0, 'gamelogbg')
     logbg.scale.setTo(5, 12);
+    confirm = game.add.sprite(300, 515, 'confirm'); confirm.inputEnabled = true;
     
     /*/ Adding all card sprites /*/
     fcard1 = game.add.sprite(100, 200, 'fcard');
@@ -69,15 +72,16 @@ create: function() {
     
     /*/ Adding baseline game text /*/
     game.add.text(200, 25, 'Cards remaining:', { font: '40px Celtic Garamond the 2nd', fill: '#000'});
-    game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
-    game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
+    facistCountText = game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
+    liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(800, 25, 'Game Logs', {font: ' 25px Celtic Garamond the 2nd', fill: '#FFF'});
     
     console.log("hi");
 },
     
 update: function() {
-    
+    facistCountText.text = 'FACIST: ' + facCount,
+    liberalCountText.text = 'LIBERAL: ' + libCount,
     /*/Event handlers for clicking on buttons/*/
     //@params: the function being called, the object, a 0, and the index of the card to be changed
     arrow1Top.events.onInputDown.add(this.cardChange, this, 0, 1);
@@ -90,6 +94,7 @@ update: function() {
     libcardglo1.events.onInputDown.add(this.setGlow, this, 0, 1);
     libcardglo2.events.onInputDown.add(this.setGlow, this, 0, 2);
     libcardglo3.events.onInputDown.add(this.setGlow, this, 0, 3);
+    confirm.events.onInputDown.add(this.confirmCards, this);
 },
     
     /*/ Event handler functions for changing the cards back and forth between liberal and facist as players click buttons /*/
@@ -211,7 +216,58 @@ setGlow: function(empty, empty2, cardNum) //highlights in glow the card clicked
             fcardglo3.alpha = 0;
             cardPlayed = 3;
         }
+    },
+    
+confirmCards: function() {
+    var f = 0; //facist cards claimed this turn
+    var l = 0; //liberal cards claimed this turn
+    var prob = 0; //used to hold probabilities
+    
+   
+    
+    /*/ Checks which cards are selected and updates counters accordingly /*/
+    if(f1Active)
+        f++;
+    else
+        l++;
+    if(f2Active)
+        f++;
+    else
+        l++;
+    if(f3Active)
+        f++;
+    else
+        l++;
+    //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
+    //Does the math to get probability that the claim was true
+    if(f == 3)
+    {
+     prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
+     }
+     else if(f == 2)
+     {
+     prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((libCount)/(total-2)));
+        }
+    else if(f == 1)
+    {
+     prob = 100 *((facCount/total) * ((libCount)/(total-1)) * ((libCount-1)/(total-2)));
+        }
+    else
+    {
+        prob = 100 *((libCount/total) * ((libCount-1)/(total-1)) * ((libCount-2)/(total-2)));
     }
+     
+console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
+    
+    //Subtracts claim from remaining card counts
+    facCount -= f;
+    libCount -= l;
+    total = facCount + libCount;
+    
+    //Calculates odds of next draw having 3 facist cards
+    prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
+console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw containing 3 facist cards.');
+}
 }
 
 ////////////////
