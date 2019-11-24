@@ -1,18 +1,18 @@
 // Set up game
 var config = {
-    width: 1000,
-    height: 600,
-	parent: 'canvas-holder',
-    renderer: Phaser.AUTO,
-    antialias: true,
-    multiTexture: true,
+width: 1000,
+height: 600,
+parent: 'canvas-holder',
+renderer: Phaser.AUTO,
+antialias: true,
+multiTexture: true,
 };
 
 var game = new Phaser.Game(config);
 
 var libCount = 6; //default count of liberal cards
 var facCount = 11; //default count of facist cards
-var libCountB = 6; //counter for second concept
+var libCountB = 6; //counter for conflict
 var facCountB = 11;
 var libBoard = 0; //# liberal cards in play on the board
 var facBoard = 0; //# facist cards in play on the board
@@ -22,31 +22,42 @@ Normal.prototype = {
 preload: function() {
     game.load.image('fcard', 'assets/img/facistcard.png');
     game.load.image('lcard', 'assets/img/liberalcard.png');
+    game.load.image('fcardglo', 'assets/img/facistcardglow.png');
+    game.load.image('lcardglo', 'assets/img/liberalcardglow.png');
     game.load.image('gamelogbg', 'assets/img/gamelogbg.png');
     game.load.image('arrow', 'assets/img/arrow.png');
-
-
+    
+    
 },
-
+    
 create: function() {
     /// booleans for each facist card; if the card is active, true, false if respective liberal is showing
     f1Active = true;
     f2Active = true;
     f3Active = true;
-
+    cardPlayed = 0; // index of card selected as played
+    
     /*/ Adding game assests and text /*/
     game.stage.backgroundColor = '#eddca4';
     logbg = game.add.sprite(750, 0, 'gamelogbg')
     logbg.scale.setTo(5, 12);
-
+    
     /*/ Adding all card sprites /*/
     fcard1 = game.add.sprite(100, 200, 'fcard');
     fcard2 = game.add.sprite(300, 200, 'fcard');
     fcard3 = game.add.sprite(500, 200, 'fcard');
+    fcardglo1 = game.add.sprite(88, 184, 'fcardglo'); fcardglo1.alpha = 0;
+    fcardglo2 = game.add.sprite(288, 184, 'fcardglo'); fcardglo2.alpha = 0;
+    fcardglo3 = game.add.sprite(488, 184, 'fcardglo'); fcardglo3.alpha = 0;
     libcard1 = game.add.sprite(100, 200, 'lcard'); libcard1.alpha = 0; //liberal cards are originally hidden
     libcard2 = game.add.sprite(300, 200, 'lcard'); libcard2.alpha = 0;
     libcard3 = game.add.sprite(500, 200, 'lcard'); libcard3.alpha = 0;
-
+    libcardglo1 = game.add.sprite(86, 185, 'lcardglo'); libcardglo1.alpha = 0;
+    libcardglo2 = game.add.sprite(286, 185, 'lcardglo'); libcardglo2.alpha = 0;
+    libcardglo3 = game.add.sprite(486, 185, 'lcardglo'); libcardglo3.alpha = 0;
+    fcardglo1.inputEnabled = true; fcardglo2.inputEnabled = true; fcardglo3.inputEnabled = true;
+    libcardglo1.inputEnabled = true; libcardglo2.inputEnabled = true; libcardglo3.inputEnabled = true;
+    
     /*/ Adding all arrow button sprites /*/
     arrow1Top = game.add.sprite(145, 165, 'arrow'); arrow1Top.inputEnabled = true;
     arrow2Top = game.add.sprite(345, 165, 'arrow'); arrow2Top.inputEnabled = true;
@@ -55,95 +66,169 @@ create: function() {
     arrow2Low = game.add.sprite(345, 485, 'arrow'); arrow2Low.inputEnabled = true;
     arrow3Low = game.add.sprite(545, 485, 'arrow'); arrow3Low.inputEnabled = true;
     arrow1Low.scale.setTo(1, -1); arrow2Low.scale.setTo(1, -1); arrow3Low.scale.setTo(1, -1);
-
+    
     /*/ Adding baseline game text /*/
     game.add.text(200, 25, 'Cards remaining:', { font: '40px Celtic Garamond the 2nd', fill: '#000'});
     game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
     game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(800, 25, 'Game Logs', {font: ' 25px Celtic Garamond the 2nd', fill: '#FFF'});
+    
+    console.log("hi");
 },
-
+    
 update: function() {
-
+    
     /*/Event handlers for clicking on buttons/*/
-    arrow1Top.events.onInputDown.add(this.card1Change, this);
-    arrow1Low.events.onInputDown.add(this.card1Change,this);
-    arrow2Top.events.onInputDown.add(this.card2Change, this);
-    arrow2Low.events.onInputDown.add(this.card2Change, this);
-    arrow3Top.events.onInputDown.add(this.card3Change, this);
-    arrow3Low.events.onInputDown.add(this.card3Change, this);
+    //@params: the function being called, the object, a 0, and the index of the card to be changed
+    arrow1Top.events.onInputDown.add(this.cardChange, this, 0, 1);
+    arrow1Low.events.onInputDown.add(this.cardChange, this, 0, 1);
+    arrow2Top.events.onInputDown.add(this.cardChange, this, 0, 2);
+    arrow2Low.events.onInputDown.add(this.cardChange, this, 0, 2);
+    arrow3Top.events.onInputDown.add(this.cardChange, this, 0, 3);
+    arrow3Low.events.onInputDown.add(this.cardChange, this, 0, 3);
+    //only tracking "on click" for the liberal glow card since it's the one on top and therefore the only one that will register mouse events
+    libcardglo1.events.onInputDown.add(this.setGlow, this, 0, 1);
+    libcardglo2.events.onInputDown.add(this.setGlow, this, 0, 2);
+    libcardglo3.events.onInputDown.add(this.setGlow, this, 0, 3);
 },
-
+    
     /*/ Event handler functions for changing the cards back and forth between liberal and facist as players click buttons /*/
-card1Change: function() {
-    if(f1Active == true) //if the facist card is currently the one visible
+cardChange: function(empty, empty1, cardNum) {
+    //don't ask why I have to have two empty values here, idk either, but I can't figure out another way to get the function to take my int as an argument, so here we are LOL
+    if(cardNum == 1)
     {
-        //switches which card is visible and toggles boolean
-        fcard1.alpha = 0;
-        libcard1.alpha = 1;
-        f1Active = false;
-
+        if(f1Active == true) //if the facist card is currently the one visible
+        {
+            //switches which card is visible and toggles boolean
+            fcard1.alpha = 0; fcardglo1.alpha = 0;
+            libcard1.alpha = 1;
+            f1Active = false;
+        }
+        else //if the liberal card is currently the one visible
+        {
+            //inverse of above
+            fcard1.alpha = 1;
+            libcard1.alpha = 0; libcardglo1.alpha = 0;
+            f1Active = true;
+        }
     }
-    else //if the liberal card is currently the one visible
+    else if(cardNum == 2)
     {
-        //inverse of above
-        fcard1.alpha = 1;
-        libcard1.alpha = 0;
-        f1Active = true;
+        if(f2Active == true) //if the facist card is currently the one visible
+        {
+            //switches which card is visible and toggles boolean
+            fcard2.alpha = 0; fcardglo2.alpha = 0;
+            libcard2.alpha = 1;
+            f2Active = false;
+        }
+        else //if the liberal card is currently the one visible
+        {
+            //inverse of above
+            fcard2.alpha = 1;
+            libcard2.alpha = 0; libcardglo2.alpha = 0;
+            f2Active = true;
+        }
+    }
+    else
+    {
+        console.log(cardNum);
+        if(f3Active == true) //if the facist card is currently the one visible
+        {
+            //switches which card is visible and toggles boolean
+            fcard3.alpha = 0; fcardglo3.alpha = 0;
+            libcard3.alpha = 1;
+            f3Active = false;
+        }
+        else //if the liberal card is currently the one visible
+        {
+            //inverse of above
+            fcard3.alpha = 1;
+            libcard3.alpha = 0; libcardglo3.alpha = 0;
+            f3Active = true;
+        }
     }
 },
-
-card2Change: function() {
-    if(f2Active == true) //if the facist card is currently the one visible
+    
+setGlow: function(empty, empty2, cardNum) //highlights in glow the card clicked
     {
-        //switches which card is visible and toggles boolean
-        fcard2.alpha = 0;
-        libcard2.alpha = 1;
-        f2Active = false;
+        if(f1Active && cardNum == 1)
+        {
+            fcardglo1.alpha = 1; //turns on glow for clicked card
+            fcardglo2.alpha = 0; //turns off glow for all other cards
+            fcardglo3.alpha = 0;
+            libcardglo1.alpha = 0;
+            libcardglo2.alpha = 0;
+            libcardglo3.alpha = 0;
+            cardPlayed = 1; //updates index of card selected as played
+        }
+        else if(f2Active && cardNum == 2)
+        {
+            fcardglo2.alpha = 1;
+            fcardglo1.alpha = 0;
+            fcardglo3.alpha = 0;
+            libcardglo1.alpha = 0;
+            libcardglo2.alpha = 0;
+            libcardglo3.alpha = 0;
+            cardPlayed = 2;
+        }
+        else if(f3Active && cardNum == 3)
+        {
+            fcardglo3.alpha = 1;
+            fcardglo2.alpha = 0;
+            fcardglo1.alpha = 0;
+            libcardglo1.alpha = 0;
+            libcardglo2.alpha = 0;
+            libcardglo3.alpha = 0;
+            cardPlayed = 3;
+        }
+        else if(!f1Active && cardNum == 1)
+        {
+            libcardglo1.alpha = 1;
+            libcardglo2.alpha = 0;
+            libcardglo3.alpha = 0;
+            fcardglo1.alpha = 0;
+            fcardglo2.alpha = 0;
+            fcardglo3.alpha = 0;
+            cardPlayed = 1;
+        }
+        else if(!f2Active && cardNum == 2)
+        {
+            libcardglo2.alpha = 1;
+            libcardglo1.alpha = 0;
+            libcardglo3.alpha = 0;
+            fcardglo1.alpha = 0;
+            fcardglo2.alpha = 0;
+            fcardglo3.alpha = 0;
+            cardPlayed = 2;
+        }
+        else
+        {
+            libcardglo3.alpha = 1;
+            libcardglo1.alpha = 0;
+            libcardglo2.alpha = 0;
+            fcardglo1.alpha = 0;
+            fcardglo2.alpha = 0;
+            fcardglo3.alpha = 0;
+            cardPlayed = 3;
+        }
     }
-    else //if the liberal card is currently the one visible
-    {
-        //inverse of above
-        fcard2.alpha = 1;
-        libcard2.alpha = 0;
-        f2Active = true;
-    }
-},
-
-card3Change: function() {
-    if(f3Active == true) //if the facist card is currently the one visible
-    {
-        //switches which card is visible and toggles boolean
-        fcard3.alpha = 0;
-        libcard3.alpha = 1;
-        f3Active = false;
-    }
-    else //if the liberal card is currently the one visible
-    {
-        //inverse of above
-        fcard3.alpha = 1;
-        libcard3.alpha = 0;
-        f3Active = true;
-    }
-}
-
 }
 
 ////////////////
 
 var Conflict = function(game) {}; //game state to handle when the president and the chancellor claim to have given/received different cards and probabilities for both draws need to be logged and accounted for
 Conflict.prototype = {
-
+    
 preload: function() {
-
+    
 },
-
+    
 create: function() {
-
+    
 },
-
+    
 update: function() {
-
+    
 }
 }
 
@@ -151,17 +236,17 @@ update: function() {
 
 var Random = function(game) {}; //Game state to log card play when government is thrown into choas and a random card is put on the board
 Random.prototype = {
-
+    
 preload: function() {
-
+    
 },
-
+    
 create: function() {
-
+    
 },
-
+    
 update: function() {
-
+    
 }
 }
 
