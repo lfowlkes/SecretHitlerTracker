@@ -1,7 +1,7 @@
 // Set up game
 var config = {
-width: 1000,
-height: 600,
+width: 1100,
+height: 700,
 parent: 'canvas-holder',
 renderer: Phaser.AUTO,
 antialias: true,
@@ -10,6 +10,8 @@ multiTexture: true,
 
 var game = new Phaser.Game(config);
 
+var FACIST = 11 // constant variable representing total facist and liberal cards in a deck
+var LIBERAL = 6
 var libCount = 6; //default count of liberal cards
 var facCount = 11; //default count of facist cards
 var total = libCount + facCount;
@@ -17,6 +19,7 @@ var libCountB = 6; //counter for conflict
 var facCountB = 11;
 var libBoard = 0; //# liberal cards in play on the board
 var facBoard = 0; //# facist cards in play on the board
+var split = false; //True when we're in a conflict state
 
 var Normal = function(game) {}; //game state for a normal round when president and chancellor agree on the cards they had
 Normal.prototype = {
@@ -42,7 +45,7 @@ create: function() {
     /*/ Adding game assests and text /*/
     game.stage.backgroundColor = '#eddca4';
     logbg = game.add.sprite(750, 0, 'gamelogbg')
-    logbg.scale.setTo(5, 12);
+    logbg.scale.setTo(7, 14);
     confirm = game.add.sprite(300, 515, 'confirm'); confirm.inputEnabled = true;
     
     /*/ Adding all card sprites /*/
@@ -74,9 +77,7 @@ create: function() {
     game.add.text(200, 25, 'Cards remaining:', { font: '40px Celtic Garamond the 2nd', fill: '#000'});
     facistCountText = game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
-    game.add.text(800, 25, 'Game Logs', {font: ' 25px Celtic Garamond the 2nd', fill: '#FFF'});
-    
-    console.log("hi");
+    game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
 },
     
 update: function() {
@@ -136,7 +137,6 @@ cardChange: function(empty, empty1, cardNum) {
     }
     else
     {
-        console.log(cardNum);
         if(f3Active == true) //if the facist card is currently the one visible
         {
             //switches which card is visible and toggles boolean
@@ -223,7 +223,52 @@ confirmCards: function() {
     var l = 0; //liberal cards claimed this turn
     var prob = 0; //used to hold probabilities
     
-   
+   /*/ Keeps track of the cards on board based off what value the player clicked/*/
+      if(cardPlayed == 1)
+      {
+          if(f1Active) {
+              facBoard++; console.log("Played: Facist");
+          }
+          else {
+              libBoard++; console.log("Played: Liberal");
+          }
+      }
+      else if(cardPlayed == 2)
+      {
+          if(f2Active) {
+              facBoard++; console.log("Played: Facist");
+          }
+          else {
+              libBoard++; console.log("Played: Liberal");
+          }
+      }
+      else if(cardPlayed == 3)
+      {
+          if(f3Active) {
+              facBoard++; console.log("Played: Facist");
+          }
+          else {
+              libBoard++; console.log("Played: Liberal");
+          }
+      }
+      //Turns off glow for all cards
+      libcardglo3.alpha = 0;
+      libcardglo1.alpha = 0;
+      libcardglo2.alpha = 0;
+      fcardglo1.alpha = 0;
+      fcardglo2.alpha = 0;
+      fcardglo3.alpha = 0;
+      
+      cardPlayed = 0; //resets card played
+      
+      console.log('Facist cards on board: ' + facBoard);
+      console.log('Liberal cards on board: ' + libBoard);
+    
+    //Checks to see if either party has reached their card-based win condition
+    if(libBoard == 5)
+        console.log("Liberals win!");
+    else if(facBoard == 6)
+        console.log("Facists win!");
     
     /*/ Checks which cards are selected and updates counters accordingly /*/
     if(f1Active)
@@ -238,8 +283,11 @@ confirmCards: function() {
         f++;
     else
         l++;
+    
+    console.log("Claim: " + f + " Facist, " + l + " Liberal");
     //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
     //Does the math to get probability that the claim was true
+   
     if(f == 3)
     {
      prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
@@ -258,15 +306,26 @@ confirmCards: function() {
     }
      
 console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
+                                                                    
     
     //Subtracts claim from remaining card counts
     facCount -= f;
     libCount -= l;
     total = facCount + libCount;
     
+    /*/ Reshuffles board when deck is < 3 /*/
+    if(total < 3)
+    {
+        facCount = FACIST - facBoard; //resets deck counts to true values based on cards on board
+        libCount = LIBERAL - libBoard;
+        total = libCount + facCount;
+        split = false; // conflict state ends once deck is reshuffled
+    }
+    
     //Calculates odds of next draw having 3 facist cards
-    prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
-console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw containing 3 facist cards.');
+        prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
+    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw containing 3 facist cards.');
+        
 }
 }
 
@@ -274,7 +333,21 @@ console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw containing 3 f
 
 var Conflict = function(game) {}; //game state to handle when the president and the chancellor claim to have given/received different cards and probabilities for both draws need to be logged and accounted for
 Conflict.prototype = {
-    
+    /* So here's how I recommend doing this:
+     * 0A. Check if the deck is about to be reshuffled. (i.e. total < 6) if it is, just ignore the conflict state because it doesn't matter because there won't be uncertainty once it shuffles. There may be some cases where it would still be beneficial to print out the probability that chancellor and president are etlling the truth about their respective draws, but I'm not sure if that's necessary yet. We can revist that later.
+     * 0B. Check if split = true already. If so, flash a warning message telling them they can't have two conflict states occur before the next reshuffle, make them press okay, and send them back to the normal stage
+     * 1. On the right side of the screen, have the president select which 3 cards they received. You can mostly just re-use the selection card of my "normal" code for this
+     * 2. Re-use my "setGlow" method to have the user select one of the president's cards, except instead of counting this as the card played, count this as the card DISCARDED. You might need to create a new "cardPicked" value for this if you want to reuse the other one for the next step
+     * 3. You're going to need to keep track of both what the president claimed they handed to the chancellor, and what they claimed to have discarded.
+     * 4. Print the probability that the president's claim is correct (again, you can re-use my code for this)
+     * 5. We're now going to live in a world in which we're assuming/pretending that the president was telling the truth about whatever the third card that they discarded was.
+     * 6. On the right side of the screen, have the chancellor input which 2 cards they claim they were handed, and re-use the setglow function to have them select which card was played (Note: 99% of the time the chancelor's selection here will be 2 facist cards, but may as wel give them the choice to be safe)
+     * 7. Split game logs into two columns. Idk how to do that with Phaser text tools but idk I believe in you
+     * 8. The left side of the logs are now going to operate with facCount and libCount based on the cards the president claims to have drawn
+     * 9. The right side of the logs are now going to operate with facCountB and libCountB based on the two cards the chancellor claims to have been given + the card the president says they discarded
+     * 10. Print the probability that the next draw has 3 red cards for both sides of the claim.
+     * 11. Set split state to be true;
+     */
 preload: function() {
     
 },
