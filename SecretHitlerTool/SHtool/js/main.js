@@ -1,11 +1,11 @@
 // Set up game
 var config = {
-width: 1100,
-height: 700,
-parent: 'canvas-holder',
-renderer: Phaser.AUTO,
-antialias: true,
-multiTexture: true,
+	width: 1100,
+	height: 700,
+	parent: 'canvas-holder',
+	renderer: Phaser.AUTO,
+	antialias: true,
+	multiTexture: true,
 };
 
 var game = new Phaser.Game(config);
@@ -35,17 +35,17 @@ preload: function() {
     game.load.image('normalbutton', 'assets/img/normalbutton.png');
     game.load.image('conflictbutton', 'assets/img/conflictbutton.png');
     game.load.image('randombutton', 'assets/img/randombutton.png');
-    
-    
+
+
 },
-    
+
 create: function() {
     /// booleans for each facist card; if the card is active, true, false if respective liberal is showing
     f1Active = true;
     f2Active = true;
     f3Active = true;
     cardPlayed = 0; // index of card selected as played
-    
+
     /*/ Adding game assests and text /*/
     game.stage.backgroundColor = '#eddca4';
     logbg = game.add.sprite(750, 0, 'gamelogbg')
@@ -54,7 +54,7 @@ create: function() {
     normalbpress = game.add.sprite(100, 630, 'normalbuttonpressed'); normalbpress.inputEnabled = true;
     conflictb = game.add.sprite(300, 630, 'conflictbutton'); conflictb.inputEnabled = true;
     randomb = game.add.sprite(500, 630, 'randombutton'); randomb.inputEnabled = true;
-    
+
     /*/ Adding all card sprites /*/
     fcard1 = game.add.sprite(100, 200, 'fcard');
     fcard2 = game.add.sprite(300, 200, 'fcard');
@@ -70,7 +70,7 @@ create: function() {
     libcardglo3 = game.add.sprite(486, 185, 'lcardglo'); libcardglo3.alpha = 0;
     fcardglo1.inputEnabled = true; fcardglo2.inputEnabled = true; fcardglo3.inputEnabled = true;
     libcardglo1.inputEnabled = true; libcardglo2.inputEnabled = true; libcardglo3.inputEnabled = true;
-    
+
     /*/ Adding all arrow button sprites /*/
     arrow1Top = game.add.sprite(145, 165, 'arrow'); arrow1Top.inputEnabled = true;
     arrow2Top = game.add.sprite(345, 165, 'arrow'); arrow2Top.inputEnabled = true;
@@ -79,14 +79,14 @@ create: function() {
     arrow2Low = game.add.sprite(345, 485, 'arrow'); arrow2Low.inputEnabled = true;
     arrow3Low = game.add.sprite(545, 485, 'arrow'); arrow3Low.inputEnabled = true;
     arrow1Low.scale.setTo(1, -1); arrow2Low.scale.setTo(1, -1); arrow3Low.scale.setTo(1, -1);
-    
+
     /*/ Adding baseline game text /*/
     game.add.text(200, 25, 'Cards remaining:', { font: '40px Celtic Garamond the 2nd', fill: '#000'});
     facistCountText = game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
 },
-    
+
 update: function() {
     facistCountText.text = 'FACIST: ' + facCount,
     liberalCountText.text = 'LIBERAL: ' + libCount,
@@ -106,7 +106,7 @@ update: function() {
     conflictb.events.onInputDown.add(startConflict, this);
     randomb.events.onInputDown.add(startRandom, this);
 },
-    
+
     /*/ Event handler functions for changing the cards back and forth between liberal and facist as players click buttons /*/
 cardChange: function(empty, empty1, cardNum) {
     //don't ask why I have to have two empty values here, idk either, but I can't figure out another way to get the function to take my int as an argument, so here we are LOL
@@ -162,7 +162,7 @@ cardChange: function(empty, empty1, cardNum) {
         }
     }
 },
-    
+
 setGlow: function(empty, empty2, cardNum) //highlights in glow the card clicked
     {
         if(f1Active && cardNum == 1)
@@ -226,12 +226,12 @@ setGlow: function(empty, empty2, cardNum) //highlights in glow the card clicked
             cardPlayed = 3;
         }
     },
-    
+
 confirmCards: function() {
     var f = 0; //facist cards claimed this turn
     var l = 0; //liberal cards claimed this turn
     var prob = 0; //used to hold probabilities
-    
+
    /*/ Keeps track of the cards on board based off what value the player clicked/*/
       if(cardPlayed == 1)
       {
@@ -267,18 +267,18 @@ confirmCards: function() {
       fcardglo1.alpha = 0;
       fcardglo2.alpha = 0;
       fcardglo3.alpha = 0;
-      
+
       cardPlayed = 0; //resets card played
-      
+
       console.log('Facist cards on board: ' + facBoard);
       console.log('Liberal cards on board: ' + libBoard);
-    
+
     //Checks to see if either party has reached their card-based win condition
     if(libBoard == 5)
         console.log("Liberals win!");
     else if(facBoard == 6)
         console.log("Facists win!");
-    
+
     /*/ Checks which cards are selected and updates counters accordingly /*/
     if(f1Active)
         f++;
@@ -292,11 +292,11 @@ confirmCards: function() {
         f++;
     else
         l++;
-    
+
     console.log("Claim: " + f + " Facist, " + l + " Liberal");
     //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
     //Does the math to get probability that the claim was true
-   
+
     if(f == 3)
     {
      prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
@@ -313,15 +313,15 @@ confirmCards: function() {
     {
         prob = 100 *((libCount/total) * ((libCount-1)/(total-1)) * ((libCount-2)/(total-2)));
     }
-     
+
 console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
-                                                                    
-    
+
+
     //Subtracts claim from remaining card counts
     facCount -= f;
     libCount -= l;
     total = facCount + libCount;
-    
+
     /*/ Reshuffles board when deck is < 3 /*/
     if(total < 3)
     {
@@ -330,11 +330,11 @@ console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
         total = libCount + facCount;
         split = false; // conflict state ends once deck is reshuffled
     }
-    
+
     //Calculates odds of next draw having 3 facist cards
         prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
     console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw containing 3 facist cards.');
-       
+
 }
 }
 
@@ -360,7 +360,7 @@ Conflict.prototype = {
 preload: function() {
     game.load.image('conflictbuttonpressed', 'assets/img/conflictbuttonpress.png');
 },
-    
+
 create: function() {
     logbg = game.add.sprite(750, 0, 'gamelogbg')
     logbg.scale.setTo(7, 14);
@@ -368,15 +368,15 @@ create: function() {
     normalb = game.add.sprite(100, 630, 'normalbutton'); normalb.inputEnabled = true;
     conflictbpress = game.add.sprite(300, 630, 'conflictbuttonpressed'); conflictbpress.inputEnabled = true;
     randomb = game.add.sprite(500, 630, 'randombutton'); randomb.inputEnabled = true;
-    
+
     /*/ Text /*/
     game.add.text(200, 25, 'Cards remaining:', { font: '40px Celtic Garamond the 2nd', fill: '#000'});
     facistCountText = game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
-                                                                    
+
 },
-    
+
 update: function() {
     facistCountText.text = 'FACIST: ' + facCount;
     liberalCountText.text = 'LIBERAL: ' + libCount;
@@ -390,11 +390,11 @@ update: function() {
 
 var Random = function(game) {}; //Game state to log card play when government is thrown into choas and a random card is put on the board
 Random.prototype = {
-    
+
 preload: function() {
     game.load.image('randombuttonpressed', 'assets/img/randombuttonpress.png');
 },
-    
+
 create: function() {
     logbg = game.add.sprite(750, 0, 'gamelogbg')
     logbg.scale.setTo(7, 14);
@@ -402,15 +402,15 @@ create: function() {
     normalb = game.add.sprite(100, 630, 'normalbutton'); normalb.inputEnabled = true;
     conflictb = game.add.sprite(300, 630, 'conflictbutton'); conflictb.inputEnabled = true;
     randombpress = game.add.sprite(500, 630, 'randombuttonpressed'); randombpress.inputEnabled = true;
-    
+
     /*/ Text /*/
     game.add.text(200, 25, 'Cards remaining:', { font: '40px Celtic Garamond the 2nd', fill: '#000'});
     facistCountText = game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
-    
+
 },
-    
+
 update: function() {
     facistCountText.text = 'FACIST: ' + facCount;
     liberalCountText.text = 'LIBERAL: ' + libCount;
