@@ -388,7 +388,7 @@ update: function() {
 
 ////////////////
 
-var Random = function(game) {}; //Game state to log card play when government is thrown into choas and a random card is put on the board
+var Random = function(game) {}; //Game state to log card play when government is thrown into choas (3 failed votes in a row) and a random card is put on the board.
 Random.prototype = {
 
 preload: function() {
