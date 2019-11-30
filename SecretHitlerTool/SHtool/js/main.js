@@ -314,7 +314,7 @@ confirmCards: function() {
         prob = 100 *((libCount/total) * ((libCount-1)/(total-1)) * ((libCount-2)/(total-2)));
     }
 
-console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
+    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
 
 
     //Subtracts claim from remaining card counts
@@ -396,6 +396,16 @@ preload: function() {
 },
 
 create: function() {
+
+    rActive = true;
+    rcard = game.add.sprite(300, 200, 'fcard');
+    rlibcard = game.add.sprite(300, 200, 'lcard'); rlibcard.alpha = 0;
+
+    rarrowTop = game.add.sprite(345, 165, 'arrow'); rarrowTop.inputEnabled = true;
+    rarrowLow = game.add.sprite(345, 485, 'arrow'); rarrowLow.inputEnabled = true;
+    rarrowLow.scale.setTo(1, -1);
+
+
     logbg = game.add.sprite(750, 0, 'gamelogbg')
     logbg.scale.setTo(7, 14);
     confirmb = game.add.sprite(300, 515, 'confirm'); confirmb.inputEnabled = true;
@@ -415,8 +425,93 @@ update: function() {
     facistCountText.text = 'FACIST: ' + facCount;
     liberalCountText.text = 'LIBERAL: ' + libCount;
     //transitions between stages
+
+    rarrowTop.events.onInputDown.add(this.rcardChange, this);
+    rarrowLow.events.onInputDown.add(this.rcardChange, this);
+
+    confirmb.events.onInputDown.add(this.rconfirmCards, this);
+
     normalb.events.onInputDown.add(startNormal, this);
     conflictb.events.onInputDown.add(startConflict, this);
+},
+
+rcardChange: function() {
+    if(rActive) //if the facist card is currently the one visible
+        {
+            //switches which card is visible and toggles boolean
+            rcard.alpha = 0;
+            rlibcard.alpha = 1;
+            rActive = false;
+        }
+    else //if the liberal card is currently the one visible
+        {
+            //inverse of above
+            rcard.alpha = 1;
+            rlibcard.alpha = 0;
+            rActive = true;
+        }
+},
+
+rconfirmCards: function() {
+    var f = 0;
+    var l = 0;
+    var prob = 0;
+
+    if(rActive)
+        {
+        facBoard++; console.log("Played: Facist");
+        }
+    else
+        {
+        libBoard++; console.log("Played: Liberal");
+        }
+
+    console.log('Facist cards on board: ' + facBoard);
+    console.log('Liberal cards on board: ' + libBoard);
+
+    //Checks to see if either party has reached their card-based win condition
+    if(libBoard == 5)
+        console.log("Liberals win!");
+    else if(facBoard == 6)
+        console.log("Facists win!");
+
+    //Checks which cards are selected and updates counters accordingly
+    if(rActive)
+        f++;
+    else
+        l++;
+
+    //console.log("Claim: " + f + " Facist, " + l + " Liberal"); <-- useless, but kept just in case
+    //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
+    //Does the math to get probability that the claim was true
+
+
+    if(f == 1)
+        prob = 100 * (facCount/total);
+    else
+        prob = 100 * (libCount/total);
+
+
+    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
+
+
+    //Subtracts claim from remaining card counts
+    facCount -= f;
+    libCount -= l;
+    total = facCount + libCount;
+
+    // Reshuffles board when deck is  < 3
+    if(total < 3)
+    {
+        facCount = FACIST - facBoard; //resets deck counts to true values based on cards on board
+        libCount = LIBERAL - libBoard;
+        total = libCount + facCount;
+        split = false; // conflict state ends once deck is reshuffled
+    }
+
+    //Calculates odds of next draw having 3 facist cards
+    prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
+    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw containing 3 facist cards.');
 }
 }
 
