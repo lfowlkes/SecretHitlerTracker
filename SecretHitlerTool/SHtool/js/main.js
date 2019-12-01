@@ -20,6 +20,7 @@ var facCountB = 11;
 var libBoard = 0; //# liberal cards in play on the board
 var facBoard = 0; //# facist cards in play on the board
 var split = false; //True when we're in a conflict state
+var gameLogs;
 
 var Normal = function(game) {}; //game state for a normal round when president and chancellor agree on the cards they had
 Normal.prototype = {
@@ -45,6 +46,7 @@ create: function() {
     f2Active = true;
     f3Active = true;
     cardPlayed = 0; // index of card selected as played
+    gameLogs = new Array();
 
     /*/ Adding game assests and text /*/
     game.stage.backgroundColor = '#eddca4';
@@ -779,11 +781,6 @@ rconfirmCards: function() {
     else
         l++;
 
-    //console.log("Claim: " + f + " Facist, " + l + " Liberal"); <-- useless, but kept just in case
-    //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
-    //Does the math to get probability that the claim was true
-
-
     if(f == 1)
         prob = 100 * (facCount/total);
     else
@@ -827,7 +824,12 @@ function startRandom()
 {
     game.state.start('Random');
 }
-
+function updateLogs(input)
+{
+    gameLogs.push(input);
+    test = game.add.text(775, 75, 'Played: 2 facist, 1 liberal', { font: '18px Arial', fill: '#FFF'});
+    
+}
 ///////////////
 
 game.state.add('Normal', Normal);
