@@ -305,11 +305,11 @@ confirmCards: function() {
      }
      else if(f == 2)
      {
-     prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((libCount)/(total-2)));
+     prob = 300 *((facCount/total) * ((facCount-1)/(total-1)) * ((libCount)/(total-2)));
         }
     else if(f == 1)
     {
-     prob = 100 *((facCount/total) * ((libCount)/(total-1)) * ((libCount-1)/(total-2)));
+     prob = 300 *((facCount/total) * ((libCount)/(total-1)) * ((libCount-1)/(total-2)));
         }
     else
     {
@@ -400,28 +400,28 @@ create: function() {
 
     /*/ Adding all card sprites /*/
     fcard1 = game.add.sprite(100, 200, 'fcard');
-    fcard2 = game.add.sprite(500, 200, 'fcard');
-   // fcard3 = game.add.sprite(500, 200, 'fcard');
+    fcard2 = game.add.sprite(300, 200, 'fcard');
+    fcard3 = game.add.sprite(500, 200, 'fcard');
     fcardglo1 = game.add.sprite(88, 184, 'fcardglo'); fcardglo1.alpha = 0;
-    fcardglo2 = game.add.sprite(588, 184, 'fcardglo'); fcardglo2.alpha = 0;
-   // fcardglo3 = game.add.sprite(488, 184, 'fcardglo'); fcardglo3.alpha = 0;
+    fcardglo2 = game.add.sprite(288, 184, 'fcardglo'); fcardglo2.alpha = 0;
+    fcardglo3 = game.add.sprite(488, 184, 'fcardglo'); fcardglo3.alpha = 0;
     libcard1 = game.add.sprite(100, 200, 'lcard'); libcard1.alpha = 0; //liberal cards are originally hidden
-    libcard2 = game.add.sprite(500, 200, 'lcard'); libcard2.alpha = 0;
-   // libcard3 = game.add.sprite(500, 200, 'lcard'); libcard3.alpha = 0;
+    libcard2 = game.add.sprite(300, 200, 'lcard'); libcard2.alpha = 0;
+    libcard3 = game.add.sprite(500, 200, 'lcard'); libcard3.alpha = 0;
     libcardglo1 = game.add.sprite(86, 185, 'lcardglo'); libcardglo1.alpha = 0;
-    libcardglo2 = game.add.sprite(586, 185, 'lcardglo'); libcardglo2.alpha = 0;
-  //  libcardglo3 = game.add.sprite(486, 185, 'lcardglo'); libcardglo3.alpha = 0;
-    fcardglo1.inputEnabled = true; fcardglo2.inputEnabled = true; //fcardglo3.inputEnabled = true;
-    libcardglo1.inputEnabled = true; libcardglo2.inputEnabled = true; //libcardglo3.inputEnabled = true;
+    libcardglo2 = game.add.sprite(286, 185, 'lcardglo'); libcardglo2.alpha = 0;
+    libcardglo3 = game.add.sprite(486, 185, 'lcardglo'); libcardglo3.alpha = 0;
+    fcardglo1.inputEnabled = true; fcardglo2.inputEnabled = true;   fcardglo3.inputEnabled = true;
+    libcardglo1.inputEnabled = true; libcardglo2.inputEnabled = true;   libcardglo3.inputEnabled = true;
 
     /*/ Adding all arrow button sprites /*/
     arrow1Top = game.add.sprite(145, 165, 'arrow'); arrow1Top.inputEnabled = true;
-    arrow2Top = game.add.sprite(545, 165, 'arrow'); arrow2Top.inputEnabled = true;
-  //  arrow3Top = game.add.sprite(545, 165, 'arrow'); arrow3Top.inputEnabled = true;
+    arrow2Top = game.add.sprite(345, 165, 'arrow'); arrow2Top.inputEnabled = true;
+    arrow3Top = game.add.sprite(545, 165, 'arrow'); arrow3Top.inputEnabled = true;
     arrow1Low = game.add.sprite(145, 485, 'arrow'); arrow1Low.inputEnabled = true;
-    arrow2Low = game.add.sprite(545, 485, 'arrow'); arrow2Low.inputEnabled = true;
-  //  arrow3Low = game.add.sprite(545, 485, 'arrow'); arrow3Low.inputEnabled = true;
-    arrow1Low.scale.setTo(1, -1); arrow2Low.scale.setTo(1, -1);// arrow3Low.scale.setTo(1, -1);
+    arrow2Low = game.add.sprite(345, 485, 'arrow'); arrow2Low.inputEnabled = true;
+    arrow3Low = game.add.sprite(545, 485, 'arrow'); arrow3Low.inputEnabled = true;
+    arrow1Low.scale.setTo(1, -1); arrow2Low.scale.setTo(1, -1); arrow3Low.scale.setTo(1, -1);
 
     /*/ Adding baseline game text /*/
     game.add.text(200, 25, 'Cards remaining:', { font: '40px Celtic Garamond the 2nd', fill: '#000'});
@@ -442,12 +442,12 @@ update: function() {
     arrow1Low.events.onInputDown.add(this.cardChange, this, 0, 1);
     arrow2Top.events.onInputDown.add(this.cardChange, this, 0, 2);
     arrow2Low.events.onInputDown.add(this.cardChange, this, 0, 2);
-    //arrow3Top.events.onInputDown.add(this.cardChange, this, 0, 3);
-    //arrow3Low.events.onInputDown.add(this.cardChange, this, 0, 3);
+    arrow3Top.events.onInputDown.add(this.cardChange, this, 0, 3);
+    arrow3Low.events.onInputDown.add(this.cardChange, this, 0, 3);
     //only tracking "on click" for the liberal glow card since it's the one on top and therefore the only one that will register mouse events
     libcardglo1.events.onInputDown.add(this.setGlow, this, 0, 1);
     libcardglo2.events.onInputDown.add(this.setGlow, this, 0, 2);
-   // libcardglo3.events.onInputDown.add(this.setGlow, this, 0, 3);
+    libcardglo3.events.onInputDown.add(this.setGlow, this, 0, 3);
     confirmb.events.onInputDown.add(this.confirmCards, this);
     conflictb.events.onInputDown.add(startConflict, this);
     randomb.events.onInputDown.add(startRandom, this);
@@ -641,21 +641,38 @@ confirmCards: function() {
     //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
     //Does the math to get probability that the claim was true
 
-    if(f == 3)
+   /* if(f == 3)
     {
-     prob = 100 *((1-((facCount/total))) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
+     prob = 100 *(((facCount/total)) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
      }
      else if(f == 2)
      {
-     prob = 100 *((1-((facCount/total) * ((facCount-1)/(total-1)))) * ((libCount)/(total-2)));
+     prob = 50 *((((facCount/total) * ((facCount-1)/(total-1))) * ((libCount)/(total-2)))+((facCount/total) * ((libCount)/(total-1)) * ((libCount-1)/(total-2))));
         }
     else if(f == 1)
     {
-     prob = 100 *(1-((facCount/total) * ((libCount)/(total-1)) * ((libCount-1)/(total-2))));
+     prob = 50 *(((facCount/total) * ((libCount)/(total-1)) * ((libCount-1)/(total-2)))+((facCount/total) * ((facCount-1)/(total-1)) * ((libCount)/(total-2))));
         }
     else
     {
-        prob = 100 *(1-(((libCount/total) * ((libCount-1)/(total-1)) * ((libCount-2)/(total-2)))));
+        prob = 100 *(((libCount/total) * ((libCount-1)/(total-1)) * ((libCount-2)/(total-2))));
+    }
+*/
+    if(f == 3)
+    {
+     prob = 100 *(((facCount/total)) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
+     }
+     else if(f == 2)
+     {
+     prob = 150 *((((facCount/total) * ((facCount-1)/(total-1))) * ((libCount)/(total-2)))+((facCount/total) * ((libCount)/(total-1)) * ((libCount-1)/(total-2))));
+        }
+    else if(f == 1)
+    {
+     prob = 150 *(((facCount/total) * ((libCount)/(total-1)) * ((libCount-1)/(total-2)))+((facCount/total) * ((facCount-1)/(total-1)) * ((libCount)/(total-2))));
+        }
+    else
+    {
+        prob = 100 *(((libCount/total) * ((libCount-1)/(total-1)) * ((libCount-2)/(total-2))));
     }
 
     console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
