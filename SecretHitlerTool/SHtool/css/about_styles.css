@@ -82,3 +82,19 @@ html {
   clear: both;
   display: table;
 }
+
+.info-cards-holder {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.info-cards-holder > .info-card {
+	float: left;
+	margin: 5px;
+	padding: 5px;
+	border: 2px solid black;
+	border-radius: 5px;
+	background: lightGrey;
+	width: 250px;
+	height: 300px;
+}
