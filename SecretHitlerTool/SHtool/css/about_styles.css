@@ -2,6 +2,16 @@ h1{
 	font-family: sans-serif;
 }
 
+h2{
+	font-family: sans-serif;
+	text-align: center;
+}
+
+h4{
+	font-family: sans-serif;
+	text-align: center;
+}
+
 body {
 	text-align: left;
 	background-color: #aaaaaa;
