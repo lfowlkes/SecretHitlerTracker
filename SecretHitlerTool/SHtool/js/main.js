@@ -656,6 +656,7 @@ confirmCards: function() {
         l++;
 
     console.log("Claim: " + f + " Facist, " + l + " Liberal");
+    gameLogs.push("Claim: " + f + " Facist, " + l + " Liberal")
     //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
     //Does the math to get probability that the claim was true
 
@@ -694,6 +695,7 @@ confirmCards: function() {
     }
 
     console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
+    gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
 
 
     //Subtracts claim from remaining card counts
@@ -708,17 +710,49 @@ confirmCards: function() {
         libCount = LIBERAL - libBoard;
         total = libCount + facCount;
         split = true; // conflict state ends once deck is reshuffled
+        console.log("Deck is Reshuffled!")
     }
 
+    gameLogs.push("Conflict Result: ");
+    //gameLogs.push("");
+
+
+    //Calculates odds of next draw having 3 facist cards
+    prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
+    console.log("If president is saying truth, then it is "+Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 facist');
+    gameLogs.push("If president is saying truth, then it is ");
+    gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 F');
+    prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
+    prob1 = 100 *((facCount-3/total) * ((facCount-4)/(total-1)) * ((facCount-5)/(total-2)));
+
+    //print out different guessing
+    if(facCount>=3){
+        if(prob>prob1){
+        console.log("If president is not saying truth, then it is "+Phaser.Math.roundTo(prob1, 0)+"% ~ " + Phaser.Math.roundTo(prob, 0)
+         + '% chance of next draw being 3 facist');
+        gameLogs.push("If president is not saying truth, then it is ");
+        gameLogs.push(Phaser.Math.roundTo(prob1, 0)+"% ~ " + Phaser.Math.roundTo(prob, 0)
+         + '% chance of next draw being 3 F')
+    }else{
+        console.log("If president is not saying truth, then it is "+Phaser.Math.roundTo(prob, 0)+"% ~ " + Phaser.Math.roundTo(prob1, 0)
+         + '% chance of next draw being 3 facist');
+        gameLogs.push("If president is not saying truth, then it is ");
+        gameLogs.push(Phaser.Math.roundTo(prob, 0)+"% ~ " + Phaser.Math.roundTo(prob1, 0)
+         + '% chance of next draw being 3 F')
+        }
+    }
+    else{
+        console.log("There will not be 3 facist cards anymore");
+        gameLogs.push("There will not be 3 facist cards anymore");
+    }
+    split = true;
     if(split===true){
         split=false;
         game.state.start('Normal');//may add popup later
     }
-    //Calculates odds of next draw having 3 facist cards
-        prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
-    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 facist');
 
-}
+    updateLogs();
+    }
 }
 
 ////////////////
