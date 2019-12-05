@@ -726,18 +726,18 @@ confirmCards: function() {
     prob1 = 100 *((facCount-3/total) * ((facCount-4)/(total-1)) * ((facCount-5)/(total-2)));
 
     //print out different guessing
-    if(facCount>=3){
+    if(facCount>=3  ){
         if(prob>prob1){
-        console.log("If president is not saying truth, then it is "+Phaser.Math.roundTo(prob1, 0)+"% ~ " + Phaser.Math.roundTo(prob, 0)
+        console.log("If president is not saying truth, then it is "+Phaser.Math.roundTo(prob1, 0)+"%~" + Phaser.Math.roundTo(prob, 0)
          + '% chance of next draw being 3 facist');
         gameLogs.push("If president is not saying truth, then it is ");
-        gameLogs.push(Phaser.Math.roundTo(prob1, 0)+"% ~ " + Phaser.Math.roundTo(prob, 0)
+        gameLogs.push(Phaser.Math.roundTo(prob1, 0)+"%~" + Phaser.Math.roundTo(prob, 0)
          + '% chance of next draw being 3 F')
     }else{
-        console.log("If president is not saying truth, then it is "+Phaser.Math.roundTo(prob, 0)+"% ~ " + Phaser.Math.roundTo(prob1, 0)
+        console.log("If president is not saying truth, then it is "+Phaser.Math.roundTo(prob, 0)+"%~" + Phaser.Math.roundTo(prob1, 0)
          + '% chance of next draw being 3 facist');
         gameLogs.push("If president is not saying truth, then it is ");
-        gameLogs.push(Phaser.Math.roundTo(prob, 0)+"% ~ " + Phaser.Math.roundTo(prob1, 0)
+        gameLogs.push(Phaser.Math.roundTo(prob, 0)+"%~" + Phaser.Math.roundTo(prob1, 0)
          + '% chance of next draw being 3 F')
         }
     }
