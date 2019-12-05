@@ -659,7 +659,7 @@ confirmCards: function() {
     //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
     //Does the math to get probability that the claim was true
 
-   /* if(f == 3)
+    if(f == 3)
     {
      prob = 100 *(((facCount/total)) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
      }
@@ -675,7 +675,7 @@ confirmCards: function() {
     {
         prob = 100 *(((libCount/total) * ((libCount-1)/(total-1)) * ((libCount-2)/(total-2))));
     }
-*/
+
     if(f == 3)
     {
      prob = 100 *(((facCount/total)) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
