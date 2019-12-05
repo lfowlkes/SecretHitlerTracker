@@ -86,6 +86,7 @@ create: function() {
     facistCountText = game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
+    updateLogs();
 },
 
 update: function() {
@@ -445,7 +446,7 @@ create: function() {
     facistCountText = game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
-
+    updateLogs();
 },
 
 update: function() {
@@ -753,6 +754,7 @@ create: function() {
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
 
+    updateLogs();
 },
 
 update: function() {
@@ -848,20 +850,17 @@ rconfirmCards: function() {
 function startNormal()
 {
     game.state.start('Normal');
-    updateLogs();
 }
 function startConflict()
 {
     game.state.start('Conflict');
-    updateLogs();
 }
 
 function startRandom()
 {
     game.state.start('Random');
-    updateLogs();
 }
-function updateLogs()
+function updateLogs() //25 lines total fit
 {
     
     for(i = 0; i < gameLogs.length; i++)
