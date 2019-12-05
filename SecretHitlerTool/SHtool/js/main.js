@@ -20,7 +20,7 @@ var facCountB = 11;
 var libBoard = 0; //# liberal cards in play on the board
 var facBoard = 0; //# facist cards in play on the board
 var split = false; //True when we're in a conflict state
-var gameLogs;
+var gameLogs = new Array();
 
 var Normal = function(game) {}; //game state for a normal round when president and chancellor agree on the cards they had
 Normal.prototype = {
@@ -46,7 +46,6 @@ create: function() {
     f2Active = true;
     f3Active = true;
     cardPlayed = 0; // index of card selected as played
-    gameLogs = new Array();
 
     /*/ Adding game assests and text /*/
     game.stage.backgroundColor = '#eddca4';
@@ -239,27 +238,33 @@ confirmCards: function() {
       {
           if(f1Active) {
               facBoard++; console.log("Played: Facist");
+              gameLogs.push("Played: Facist");
           }
           else {
               libBoard++; console.log("Played: Liberal");
+              gameLogs.push("Played: Liberal");
           }
       }
       else if(cardPlayed == 2)
       {
           if(f2Active) {
               facBoard++; console.log("Played: Facist");
+              gameLogs.push("Played: Facist");
           }
           else {
               libBoard++; console.log("Played: Liberal");
+              gameLogs.push("Played: Liberal");
           }
       }
       else if(cardPlayed == 3)
       {
           if(f3Active) {
               facBoard++; console.log("Played: Facist");
+              gameLogs.push("Played: Facist");
           }
           else {
               libBoard++; console.log("Played: Liberal");
+              gameLogs.push("Played: Liberal");
           }
       }
       //Turns off glow for all cards
@@ -273,13 +278,21 @@ confirmCards: function() {
       cardPlayed = 0; //resets card played
 
       console.log('Facist cards on board: ' + facBoard);
+      gameLogs.push('Facist cards on board: ' + facBoard);
       console.log('Liberal cards on board: ' + libBoard);
+      gameLogs.push('Liberal cards on board: ' + libBoard);
 
     //Checks to see if either party has reached their card-based win condition
     if(libBoard == 5)
+    {
         console.log("Liberals win!");
+        gameLogs.push("Liberals win!");
+    }
     else if(facBoard == 6)
+    {
         console.log("Facists win!");
+        gameLogs.push("Facists win!");
+    }
 
     /*/ Checks which cards are selected and updates counters accordingly /*/
     if(f1Active)
@@ -296,6 +309,7 @@ confirmCards: function() {
         l++;
 
     console.log("Claim: " + f + " Facist, " + l + " Liberal");
+    gameLogs.push("Claim: " + f + " Facist, " + l + " Liberal");
     //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
     //Does the math to get probability that the claim was true
 
@@ -317,6 +331,7 @@ confirmCards: function() {
     }
 
     console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
+    gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
 
 
     //Subtracts claim from remaining card counts
@@ -335,8 +350,10 @@ confirmCards: function() {
 
     //Calculates odds of next draw having 3 facist cards
         prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
-    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw containing 3 facist cards.');
+    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 facist cards.');
+    gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 facist');
 
+    updateLogs();
 }
 }
 
@@ -698,7 +715,7 @@ confirmCards: function() {
     }
     //Calculates odds of next draw having 3 facist cards
         prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
-    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw containing 3 facist cards.');
+    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 facist');
 
 }
 }
@@ -823,7 +840,7 @@ rconfirmCards: function() {
 
     //Calculates odds of next draw having 3 facist cards
     prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
-    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw containing 3 facist cards.');
+    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 facist ');
 }
 }
 
@@ -831,20 +848,26 @@ rconfirmCards: function() {
 function startNormal()
 {
     game.state.start('Normal');
+    updateLogs();
 }
 function startConflict()
 {
     game.state.start('Conflict');
+    updateLogs();
 }
 
 function startRandom()
 {
     game.state.start('Random');
+    updateLogs();
 }
-function updateLogs(input)
+function updateLogs()
 {
-    gameLogs.push(input);
-    test = game.add.text(775, 75, 'Played: 2 facist, 1 liberal', { font: '18px Arial', fill: '#FFF'});
+    
+    for(i = 0; i < gameLogs.length; i++)
+      {
+        game.add.text(760, (i*25) + 75, gameLogs[i], { font: '18px Arial', fill: '#FFF'});
+      }
     
 }
 ///////////////
