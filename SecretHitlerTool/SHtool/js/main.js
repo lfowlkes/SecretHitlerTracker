@@ -899,9 +899,13 @@ function updateLogs() //25 lines total fit
     
     for(i = 0; i < gameLogs.length; i++)
       {
-        game.add.text(760, (i*25) + 75, gameLogs[i], { font: '18px Arial', fill: '#FFF'});
+       // game.add.text(760, (i*25) + 75, gameLogs[i], { font: '18px Arial', fill: '#FFF'});
+	   	var text = document.getElementById("game-log");
+		var content = document.createTextNode(gameLogs[i]);
+		text.appendChild(content);
       }
-    
+	  var linebreak = document.createElement("br");
+	  text.appendChild(lineBreak);
 }
 ///////////////
 
