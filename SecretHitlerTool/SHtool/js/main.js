@@ -86,7 +86,7 @@ create: function() {
     fascistCountText = game.add.text(120, 100, 'fascist: ' + facCount, { font: '25px Arial', fill: '#000'});
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
-    updateLogs();
+    //updateLogs();
 },
 
 update: function() {
@@ -280,19 +280,23 @@ confirmCards: function() {
 
       console.log('fascist cards on board: ' + facBoard);
       gameLogs.push('fascist cards on board: ' + facBoard);
+      gameLogs.push(' ___________________ ');
       console.log('Liberal cards on board: ' + libBoard);
       gameLogs.push('Liberal cards on board: ' + libBoard);
+      gameLogs.push(' ___________________ ');
 
     //Checks to see if either party has reached their card-based win condition
     if(libBoard == 5)
     {
         console.log("Liberals win!");
         gameLogs.push("Liberals win!");
+        //gameLogs.push(' ___________________ '); edited out cause unnecessary
     }
     else if(facBoard == 6)
     {
         console.log("fascists win!");
         gameLogs.push("fascists win!");
+        //gameLogs.push(' ___________________ '); edited out cause unnecessary
     }
 
     /*/ Checks which cards are selected and updates counters accordingly /*/
@@ -311,6 +315,7 @@ confirmCards: function() {
 
     console.log("Claim: " + f + " fascist, " + l + " Liberal");
     gameLogs.push("Claim: " + f + " fascist, " + l + " Liberal");
+    gameLogs.push(' __________________ ');
     //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
     //Does the math to get probability that the claim was true
 
@@ -333,6 +338,7 @@ confirmCards: function() {
 
     console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
     gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
+    gameLogs.push(' ______________ ');
 
 
     //Subtracts claim from remaining card counts
@@ -353,6 +359,7 @@ confirmCards: function() {
         prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
     console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 fascist cards.');
     gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 fascist');
+    gameLogs.push(' ___________________________________ ');
 
     updateLogs();
 }
@@ -446,7 +453,7 @@ create: function() {
     fascistCountText = game.add.text(120, 100, 'fascist: ' + facCount, { font: '25px Arial', fill: '#000'});
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
-    updateLogs();
+    //updateLogs();
 },
 
 update: function() {
@@ -656,7 +663,8 @@ confirmCards: function() {
         l++;
 
     console.log("Claim: " + f + " fascist, " + l + " Liberal");
-    gameLogs.push("Claim: " + f + " fascist, " + l + " Liberal")
+    gameLogs.push("Claim: " + f + " fascist, " + l + " Liberal");
+    gameLogs.push(' __________________ ');
     //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
     //Does the math to get probability that the claim was true
 
@@ -696,6 +704,7 @@ confirmCards: function() {
 
     console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
     gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
+    gameLogs.push(' ______________ ');
 
 
     //Subtracts claim from remaining card counts
@@ -732,19 +741,21 @@ confirmCards: function() {
          + '% chance of next draw being 3 fascist');
         gameLogs.push("If president is not saying truth, then it is ");
         gameLogs.push(Phaser.Math.roundTo(prob1, 0)+"%~" + Phaser.Math.roundTo(prob, 0)
-         + '% chance of next draw being 3 F')
+         + '% chance of next draw being 3 F');
     }else{
         console.log("If president is not saying truth, then it is "+Phaser.Math.roundTo(prob, 0)+"%~" + Phaser.Math.roundTo(prob1, 0)
          + '% chance of next draw being 3 fascist');
         gameLogs.push("If president is not saying truth, then it is ");
         gameLogs.push(Phaser.Math.roundTo(prob, 0)+"%~" + Phaser.Math.roundTo(prob1, 0)
-         + '% chance of next draw being 3 F')
+         + '% chance of next draw being 3 F');
         }
     }
     else{
         console.log("There will not be 3 fascist cards anymore");
         gameLogs.push("There will not be 3 fascist cards anymore");
     }
+    gameLogs.push(' ___________________________________ ');
+
     split = true;
     if(split===true){
         split=false;
@@ -788,7 +799,7 @@ create: function() {
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
 
-    updateLogs();
+    //updateLogs();
 },
 
 update: function() {
@@ -837,7 +848,11 @@ rconfirmCards: function() {
         }
 
     console.log('fascist cards on board: ' + facBoard);
+	gameLogs.push('fascist cards on board: ' + facBoard);
+    gameLogs.push(' ___________________ ');
     console.log('Liberal cards on board: ' + libBoard);
+	gameLogs.push('Liberal cards on board: ' + libBoard);
+    gameLogs.push(' ___________________ ');
 
     //Checks to see if either party has reached their card-based win condition
     if(libBoard == 5)
@@ -858,7 +873,8 @@ rconfirmCards: function() {
 
 
     console.log(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
-
+    gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of claim being true.');
+    gameLogs.push(' ______________ ');
 
     //Subtracts claim from remaining card counts
     facCount -= f;
@@ -877,6 +893,10 @@ rconfirmCards: function() {
     //Calculates odds of next draw having 3 fascist cards
     prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
     console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 fascist ');
+    gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 fascist');
+    gameLogs.push(' ___________________________________ ');
+
+    updateLogs();
 }
 }
 
@@ -906,6 +926,7 @@ function updateLogs() //25 lines total fit
       }
 	  var lineBreak = document.createElement("br");
 	  text.appendChild(lineBreak); // error at the moment
+	  gameLogs = [];
 }
 ///////////////
 
