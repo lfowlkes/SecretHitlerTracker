@@ -10,24 +10,24 @@ var config = {
 
 var game = new Phaser.Game(config);
 
-var FACIST = 11 // constant variable representing total facist and liberal cards in a deck
+var fascist = 11 // constant variable representing total fascist and liberal cards in a deck
 var LIBERAL = 6
 var libCount = 6; //default count of liberal cards
-var facCount = 11; //default count of facist cards
+var facCount = 11; //default count of fascist cards
 var total = libCount + facCount;
 var libCountB = 6; //counter for conflict
 var facCountB = 11;
 var libBoard = 0; //# liberal cards in play on the board
-var facBoard = 0; //# facist cards in play on the board
+var facBoard = 0; //# fascist cards in play on the board
 var split = false; //True when we're in a conflict state
 var gameLogs = new Array();
 
 var Normal = function(game) {}; //game state for a normal round when president and chancellor agree on the cards they had
 Normal.prototype = {
 preload: function() {
-    game.load.image('fcard', 'assets/img/facistcard.png');
+    game.load.image('fcard', 'assets/img/fascistcard.png');
     game.load.image('lcard', 'assets/img/liberalcard.png');
-    game.load.image('fcardglo', 'assets/img/facistcardglow.png');
+    game.load.image('fcardglo', 'assets/img/fascistcardglow.png');
     game.load.image('lcardglo', 'assets/img/liberalcardglow.png');
     game.load.image('gamelogbg', 'assets/img/gamelogbg.png');
     game.load.image('arrow', 'assets/img/arrow.png');
@@ -41,7 +41,7 @@ preload: function() {
 },
 
 create: function() {
-    /// booleans for each facist card; if the card is active, true, false if respective liberal is showing
+    /// booleans for each fascist card; if the card is active, true, false if respective liberal is showing
     f1Active = true;
     f2Active = true;
     f3Active = true;
@@ -83,14 +83,14 @@ create: function() {
 
     /*/ Adding baseline game text /*/
     game.add.text(200, 25, 'Cards remaining:', { font: '40px Celtic Garamond the 2nd', fill: '#000'});
-    facistCountText = game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
+    fascistCountText = game.add.text(120, 100, 'fascist: ' + facCount, { font: '25px Arial', fill: '#000'});
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
     updateLogs();
 },
 
 update: function() {
-    facistCountText.text = 'FACIST: ' + facCount,
+    fascistCountText.text = 'fascist: ' + facCount,
     liberalCountText.text = 'LIBERAL: ' + libCount,
     /*/Event handlers for clicking on buttons/*/
     //@params: the function being called, the object, a 0, and the index of the card to be changed
@@ -109,12 +109,12 @@ update: function() {
     randomb.events.onInputDown.add(startRandom, this);
 },
 
-    /*/ Event handler functions for changing the cards back and forth between liberal and facist as players click buttons /*/
+    /*/ Event handler functions for changing the cards back and forth between liberal and fascist as players click buttons /*/
 cardChange: function(empty, empty1, cardNum) {
     //don't ask why I have to have two empty values here, idk either, but I can't figure out another way to get the function to take my int as an argument, so here we are LOL
     if(cardNum == 1)
     {
-        if(f1Active == true) //if the facist card is currently the one visible
+        if(f1Active == true) //if the fascist card is currently the one visible
         {
             //switches which card is visible and toggles boolean
             fcard1.alpha = 0; fcardglo1.alpha = 0;
@@ -131,7 +131,7 @@ cardChange: function(empty, empty1, cardNum) {
     }
     else if(cardNum == 2)
     {
-        if(f2Active == true) //if the facist card is currently the one visible
+        if(f2Active == true) //if the fascist card is currently the one visible
         {
             //switches which card is visible and toggles boolean
             fcard2.alpha = 0; fcardglo2.alpha = 0;
@@ -148,7 +148,7 @@ cardChange: function(empty, empty1, cardNum) {
     }
     else
     {
-        if(f3Active == true) //if the facist card is currently the one visible
+        if(f3Active == true) //if the fascist card is currently the one visible
         {
             //switches which card is visible and toggles boolean
             fcard3.alpha = 0; fcardglo3.alpha = 0;
@@ -230,7 +230,7 @@ setGlow: function(empty, empty2, cardNum) //highlights in glow the card clicked
     },
 
 confirmCards: function() {
-    var f = 0; //facist cards claimed this turn
+    var f = 0; //fascist cards claimed this turn
     var l = 0; //liberal cards claimed this turn
     var prob = 0; //used to hold probabilities
 
@@ -238,8 +238,8 @@ confirmCards: function() {
       if(cardPlayed == 1)
       {
           if(f1Active) {
-              facBoard++; console.log("Played: Facist");
-              gameLogs.push("Played: Facist");
+              facBoard++; console.log("Played: fascist");
+              gameLogs.push("Played: fascist");
           }
           else {
               libBoard++; console.log("Played: Liberal");
@@ -249,8 +249,8 @@ confirmCards: function() {
       else if(cardPlayed == 2)
       {
           if(f2Active) {
-              facBoard++; console.log("Played: Facist");
-              gameLogs.push("Played: Facist");
+              facBoard++; console.log("Played: fascist");
+              gameLogs.push("Played: fascist");
           }
           else {
               libBoard++; console.log("Played: Liberal");
@@ -260,8 +260,8 @@ confirmCards: function() {
       else if(cardPlayed == 3)
       {
           if(f3Active) {
-              facBoard++; console.log("Played: Facist");
-              gameLogs.push("Played: Facist");
+              facBoard++; console.log("Played: fascist");
+              gameLogs.push("Played: fascist");
           }
           else {
               libBoard++; console.log("Played: Liberal");
@@ -278,8 +278,8 @@ confirmCards: function() {
 
       cardPlayed = 0; //resets card played
 
-      console.log('Facist cards on board: ' + facBoard);
-      gameLogs.push('Facist cards on board: ' + facBoard);
+      console.log('fascist cards on board: ' + facBoard);
+      gameLogs.push('fascist cards on board: ' + facBoard);
       console.log('Liberal cards on board: ' + libBoard);
       gameLogs.push('Liberal cards on board: ' + libBoard);
 
@@ -291,8 +291,8 @@ confirmCards: function() {
     }
     else if(facBoard == 6)
     {
-        console.log("Facists win!");
-        gameLogs.push("Facists win!");
+        console.log("fascists win!");
+        gameLogs.push("fascists win!");
     }
 
     /*/ Checks which cards are selected and updates counters accordingly /*/
@@ -309,8 +309,8 @@ confirmCards: function() {
     else
         l++;
 
-    console.log("Claim: " + f + " Facist, " + l + " Liberal");
-    gameLogs.push("Claim: " + f + " Facist, " + l + " Liberal");
+    console.log("Claim: " + f + " fascist, " + l + " Liberal");
+    gameLogs.push("Claim: " + f + " fascist, " + l + " Liberal");
     //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
     //Does the math to get probability that the claim was true
 
@@ -343,16 +343,16 @@ confirmCards: function() {
     /*/ Reshuffles board when deck is < 3 /*/
     if(total < 3)
     {
-        facCount = FACIST - facBoard; //resets deck counts to true values based on cards on board
+        facCount = fascist - facBoard; //resets deck counts to true values based on cards on board
         libCount = LIBERAL - libBoard;
         total = libCount + facCount;
         split = false; // conflict state ends once deck is reshuffled
     }
 
-    //Calculates odds of next draw having 3 facist cards
+    //Calculates odds of next draw having 3 fascist cards
         prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
-    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 facist cards.');
-    gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 facist');
+    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 fascist cards.');
+    gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 fascist');
 
     updateLogs();
 }
@@ -370,7 +370,7 @@ Conflict.prototype = {//This state will only happen if there is a fac card is pl
      * 3. You're going to need to keep track of both what the president claimed they handed to the chancellor, and what they claimed to have discarded.
      * 4. Print the probability that the president's claim is correct (again, you can re-use my code for this)
      * 5. We're now going to live in a world in which we're assuming/pretending that the president was telling the truth about whatever the third card that they discarded was.
-     * 6. On the right side of the screen, have the chancellor input which 2 cards they claim they were handed, and re-use the setglow function to have them select which card was played (Note: 99% of the time the chancelor's selection here will be 2 facist cards, but may as wel give them the choice to be safe)
+     * 6. On the right side of the screen, have the chancellor input which 2 cards they claim they were handed, and re-use the setglow function to have them select which card was played (Note: 99% of the time the chancelor's selection here will be 2 fascist cards, but may as wel give them the choice to be safe)
      * 7. Split game logs into two columns. Idk how to do that with Phaser text tools but idk I believe in you
      * 8. The left side of the logs are now going to operate with facCount and libCount based on the cards the president claims to have drawn
      * 9. The right side of the logs are now going to operate with facCountB and libCountB based on the two cards the chancellor claims to have been given + the card the president says they discarded
@@ -379,9 +379,9 @@ Conflict.prototype = {//This state will only happen if there is a fac card is pl
      */
 preload: function() {
     game.load.image('conflictbuttonpressed', 'assets/img/conflictbuttonpress.png');
-    game.load.image('fcard', 'assets/img/facistcard.png');
+    game.load.image('fcard', 'assets/img/fascistcard.png');
     game.load.image('lcard', 'assets/img/liberalcard.png');
-    game.load.image('fcardglo', 'assets/img/facistcardglow.png');
+    game.load.image('fcardglo', 'assets/img/fascistcardglow.png');
     game.load.image('lcardglo', 'assets/img/liberalcardglow.png');
     game.load.image('gamelogbg', 'assets/img/gamelogbg.png');
     game.load.image('arrow', 'assets/img/arrow.png');
@@ -443,14 +443,14 @@ create: function() {
 
     /*/ Adding baseline game text /*/
     game.add.text(200, 25, 'Cards remaining:', { font: '40px Celtic Garamond the 2nd', fill: '#000'});
-    facistCountText = game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
+    fascistCountText = game.add.text(120, 100, 'fascist: ' + facCount, { font: '25px Arial', fill: '#000'});
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
     updateLogs();
 },
 
 update: function() {
-    facistCountText.text = 'FACIST: ' + facCount;
+    fascistCountText.text = 'fascist: ' + facCount;
     liberalCountText.text = 'LIBERAL: ' + libCount;
     //transitions between stages
     normalb.events.onInputDown.add(startNormal, this);
@@ -474,7 +474,7 @@ cardChange: function(empty, empty1, cardNum) {
     //don't ask why I have to have two empty values here, idk either, but I can't figure out another way to get the function to take my int as an argument, so here we are LOL
     if(cardNum == 1)
     {
-        if(f1Active == true) //if the facist card is currently the one visible
+        if(f1Active == true) //if the fascist card is currently the one visible
         {
             //switches which card is visible and toggles boolean
             fcard1.alpha = 0; fcardglo1.alpha = 0;
@@ -491,7 +491,7 @@ cardChange: function(empty, empty1, cardNum) {
     }
     else if(cardNum == 2)
     {
-        if(f2Active == true) //if the facist card is currently the one visible
+        if(f2Active == true) //if the fascist card is currently the one visible
         {
             //switches which card is visible and toggles boolean
             fcard2.alpha = 0; fcardglo2.alpha = 0;
@@ -508,7 +508,7 @@ cardChange: function(empty, empty1, cardNum) {
     }
     else
     {
-        if(f3Active == true) //if the facist card is currently the one visible
+        if(f3Active == true) //if the fascist card is currently the one visible
         {
             //switches which card is visible and toggles boolean
             fcard3.alpha = 0; fcardglo3.alpha = 0;
@@ -590,7 +590,7 @@ setGlow: function(empty, empty2, cardNum) //highlights in glow the card clicked
     },
 
 confirmCards: function() {
-    var f = 0; //facist cards claimed this turn
+    var f = 0; //fascist cards claimed this turn
     var l = 0; //liberal cards claimed this turn
     var prob = 0; //used to hold probabilities
 
@@ -598,7 +598,7 @@ confirmCards: function() {
       if(cardPlayed == 1)
       {
           if(f1Active) {
-              facBoard++; console.log("Played: Facist");
+              facBoard++; console.log("Played: fascist");
           }
           else {
               libBoard++; console.log("Played: Liberal");
@@ -607,7 +607,7 @@ confirmCards: function() {
       else if(cardPlayed == 2)
       {
           if(f2Active) {
-              facBoard++; console.log("Played: Facist");
+              facBoard++; console.log("Played: fascist");
           }
           else {
               libBoard++; console.log("Played: Liberal");
@@ -616,7 +616,7 @@ confirmCards: function() {
       else if(cardPlayed == 3)
       {
           if(f3Active) {
-              facBoard++; console.log("Played: Facist");
+              facBoard++; console.log("Played: fascist");
           }
           else {
               libBoard++; console.log("Played: Liberal");
@@ -632,14 +632,14 @@ confirmCards: function() {
 
       cardPlayed = 0; //resets card played
 
-      console.log('Facist cards on board: ' + facBoard);
+      console.log('fascist cards on board: ' + facBoard);
       console.log('Liberal cards on board: ' + libBoard);
 
     //Checks to see if either party has reached their card-based win condition
     if(libBoard == 5)
         console.log("Liberals win!");
     else if(facBoard == 6)
-        console.log("Facists win!");
+        console.log("fascists win!");
 
     /*/ Checks which cards are selected and updates counters accordingly /*/
     if(f1Active)
@@ -655,8 +655,8 @@ confirmCards: function() {
     else
         l++;
 
-    console.log("Claim: " + f + " Facist, " + l + " Liberal");
-    gameLogs.push("Claim: " + f + " Facist, " + l + " Liberal")
+    console.log("Claim: " + f + " fascist, " + l + " Liberal");
+    gameLogs.push("Claim: " + f + " fascist, " + l + " Liberal")
     //NOTE: This block is commented out only because the forward slashes mess up my indentation on Xcode. It works fine otherwise.
     //Does the math to get probability that the claim was true
 
@@ -706,7 +706,7 @@ confirmCards: function() {
     /*/ Reshuffles board when deck is < 3 /*/
     if(total < 3)
     {
-        facCount = FACIST - facBoard; //resets deck counts to true values based on cards on board
+        facCount = fascist - facBoard; //resets deck counts to true values based on cards on board
         libCount = LIBERAL - libBoard;
         total = libCount + facCount;
         split = true; // conflict state ends once deck is reshuffled
@@ -717,9 +717,9 @@ confirmCards: function() {
     //gameLogs.push("");
 
 
-    //Calculates odds of next draw having 3 facist cards
+    //Calculates odds of next draw having 3 fascist cards
     prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
-    console.log("If president is saying truth, then it is "+Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 facist');
+    console.log("If president is saying truth, then it is "+Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 fascist');
     gameLogs.push("If president is saying truth, then it is ");
     gameLogs.push(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 F');
     prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
@@ -729,21 +729,21 @@ confirmCards: function() {
     if(facCount>=3  ){
         if(prob>prob1){
         console.log("If president is not saying truth, then it is "+Phaser.Math.roundTo(prob1, 0)+"%~" + Phaser.Math.roundTo(prob, 0)
-         + '% chance of next draw being 3 facist');
+         + '% chance of next draw being 3 fascist');
         gameLogs.push("If president is not saying truth, then it is ");
         gameLogs.push(Phaser.Math.roundTo(prob1, 0)+"%~" + Phaser.Math.roundTo(prob, 0)
          + '% chance of next draw being 3 F')
     }else{
         console.log("If president is not saying truth, then it is "+Phaser.Math.roundTo(prob, 0)+"%~" + Phaser.Math.roundTo(prob1, 0)
-         + '% chance of next draw being 3 facist');
+         + '% chance of next draw being 3 fascist');
         gameLogs.push("If president is not saying truth, then it is ");
         gameLogs.push(Phaser.Math.roundTo(prob, 0)+"%~" + Phaser.Math.roundTo(prob1, 0)
          + '% chance of next draw being 3 F')
         }
     }
     else{
-        console.log("There will not be 3 facist cards anymore");
-        gameLogs.push("There will not be 3 facist cards anymore");
+        console.log("There will not be 3 fascist cards anymore");
+        gameLogs.push("There will not be 3 fascist cards anymore");
     }
     split = true;
     if(split===true){
@@ -784,7 +784,7 @@ create: function() {
 
     /*/ Text /*/
     game.add.text(200, 25, 'Cards remaining:', { font: '40px Celtic Garamond the 2nd', fill: '#000'});
-    facistCountText = game.add.text(120, 100, 'FACIST: ' + facCount, { font: '25px Arial', fill: '#000'});
+    fascistCountText = game.add.text(120, 100, 'fascist: ' + facCount, { font: '25px Arial', fill: '#000'});
     liberalCountText = game.add.text(515, 100, 'LIBERAL: ' + libCount, { font: '25px Arial', fill: '#000'});
     game.add.text(835, 25, 'Game Logs', {font: ' 30px Celtic Garamond the 2nd', fill: '#FFF'});
 
@@ -792,7 +792,7 @@ create: function() {
 },
 
 update: function() {
-    facistCountText.text = 'FACIST: ' + facCount;
+    fascistCountText.text = 'fascist: ' + facCount;
     liberalCountText.text = 'LIBERAL: ' + libCount;
     //transitions between stages
 
@@ -806,7 +806,7 @@ update: function() {
 },
 
 rcardChange: function() {
-    if(rActive) //if the facist card is currently the one visible
+    if(rActive) //if the fascist card is currently the one visible
         {
             //switches which card is visible and toggles boolean
             rcard.alpha = 0;
@@ -829,21 +829,21 @@ rconfirmCards: function() {
 
     if(rActive)
         {
-        facBoard++; console.log("Played: Facist");
+        facBoard++; console.log("Played: fascist");
         }
     else
         {
         libBoard++; console.log("Played: Liberal");
         }
 
-    console.log('Facist cards on board: ' + facBoard);
+    console.log('fascist cards on board: ' + facBoard);
     console.log('Liberal cards on board: ' + libBoard);
 
     //Checks to see if either party has reached their card-based win condition
     if(libBoard == 5)
         console.log("Liberals win!");
     else if(facBoard == 6)
-        console.log("Facists win!");
+        console.log("fascists win!");
 
     //Checks which cards are selected and updates counters accordingly
     if(rActive)
@@ -853,7 +853,7 @@ rconfirmCards: function() {
 
     if(f == 1)
         prob = 100 * (facCount/total);
-    else
+    	else
         prob = 100 * (libCount/total);
 
 
@@ -868,15 +868,15 @@ rconfirmCards: function() {
     // Reshuffles board when deck is  < 3
     if(total < 3)
     {
-        facCount = FACIST - facBoard; //resets deck counts to true values based on cards on board
+        facCount = fascist - facBoard; //resets deck counts to true values based on cards on board
         libCount = LIBERAL - libBoard;
         total = libCount + facCount;
         split = false; // conflict state ends once deck is reshuffled
     }
 
-    //Calculates odds of next draw having 3 facist cards
+    //Calculates odds of next draw having 3 fascist cards
     prob = 100 *((facCount/total) * ((facCount-1)/(total-1)) * ((facCount-2)/(total-2)));
-    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 facist ');
+    console.log(Phaser.Math.roundTo(prob, 0) + '% chance of next draw being 3 fascist ');
 }
 }
 
@@ -896,16 +896,16 @@ function startRandom()
 }
 function updateLogs() //25 lines total fit
 {
-    
+	var text;
     for(i = 0; i < gameLogs.length; i++)
       {
        // game.add.text(760, (i*25) + 75, gameLogs[i], { font: '18px Arial', fill: '#FFF'});
-	   	var text = document.getElementById("game-log");
+	   	text = document.getElementById("game-log");
 		var content = document.createTextNode(gameLogs[i]);
 		text.appendChild(content);
       }
-	  var linebreak = document.createElement("br");
-	  text.appendChild(lineBreak);
+	  var lineBreak = document.createElement("br");
+	  text.appendChild(lineBreak); // error at the moment
 }
 ///////////////
 
