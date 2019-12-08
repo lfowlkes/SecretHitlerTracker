@@ -23,21 +23,32 @@ p.description{
 	max-width: 800px;
 }
 
+.game-log-holder{
+	width: 1px;
+	overflow: visible;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 #game-log{
-	position:absolute;
+	position: absolute;
 	z-index: 10;
-	margin-left: 750px;
+	margin-left: 200px;
 	margin-top: auto;
 	text-align: left;
 	padding: 5px;
-	border: 1px solid black;
-	border-radius: 5px;
+	border: 5px solid black;
+	border-left-width: 1px;
+	border-radius: 0px 5px 5px 0px; /* top-left | top-right | bottom-right | bottom-left */
 	background: lightGrey;
 	overflow-y: scroll;
-	height: 697px;
+	height: 690px;
 	width: 350px;
 }
 
 canvas {
 	border: 5px solid black;
+	border-radius: 5px;
+	margin-left: auto;
+	margin-right: auto;
 }
