@@ -90,14 +90,19 @@ html {
 [class*="col-"] {
   float: left;
   padding: 15px;
-  border: 1px solid red;
+  /*border: 1px solid red;*/ /* Uncomment this while you're working on it */
+  min-height: 400px;
 }
-
 
 .row::after {
   content: "";
   clear: both;
   display: table;
+}
+
+.header2{
+	text-align: center;
+	padding: 0px;
 }
 
 .info-cards-holder {
@@ -110,11 +115,18 @@ html {
 	float: left;
 	margin: 5px;
 	padding: 5px;
-	border: 2px solid black;
+	border: 2px solid #555555; /* same as BG currently */
+	box-shadow: 0px 0px 10px #666666;
 	border-radius: 5px;
 	background: lightGrey;
 	width: 250px;
 	height: 400px;
+}
+
+.rounded-img{
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
 }
 
 .img-container {
