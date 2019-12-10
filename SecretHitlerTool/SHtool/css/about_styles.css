@@ -146,6 +146,7 @@ html {
 .rounded-img{
 	width: 100px;
 	height: 100px;
+	border: 2px solid #777777;
 	border-radius: 50%;
 }
 
