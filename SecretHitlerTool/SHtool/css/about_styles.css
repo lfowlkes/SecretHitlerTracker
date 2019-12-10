@@ -34,13 +34,13 @@ p {
 
 /* link stuff */
 a:link {
-	color: #00cc00;
+	color: #d36666;
 }
 a:visited {
-	color: #00cc00;
+	color: #add8e6;
 }
 a:hover {
-	color: #00ff00;
+	color: #d36666;
 	-o-transition: .3s;
 	-ms-transition: .3s;
 	-moz-transition: .3s;
