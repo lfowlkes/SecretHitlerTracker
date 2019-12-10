@@ -127,6 +127,7 @@ html {
 
 .info-cards-holder {
 	width: 1300px;
+	height: 450px;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -134,13 +135,50 @@ html {
 .info-cards-holder > .info-card {
 	float: left;
 	margin: 5px;
-	padding: 5px;
-	border: 2px solid #555555; /* same as BG currently */
-	box-shadow: 0px 0px 10px #666666;
-	border-radius: 5px;
-	background: lightGrey;
 	width: 250px;
 	height: 400px;
+	perspective: 1000px; /* how "far away" on the z-axis the viewer is */
+	background-color: transparent;
+}
+
+.info-card-inner {
+	border: 2px solid #555555; /* same as BG currently */
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	border-radius: 5px;
+	background: lightGrey;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	margin: 5px;
+	transition: transform 0.6s;
+	transform-style: preserve-3d;
+	/* overflow: hidden; <-- unfortunately this breaks it. More info: https://css-tricks.com/things-watch-working-css-3d/ */
+}
+
+.info-card:hover .info-card-inner {
+	transform: rotateY(180deg);
+}
+
+.info-card-front, .info-card-back {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	backface-visibility: hidden;
+	border-radius: 5px;
+}
+
+.info-card-front {
+	padding: 10px;
+	background-color: #bbbbbb;
+	color: black;
+}
+
+.info-card-back {
+	padding: 0px;
+	background-color: white;
+	transform: rotateY(180deg);
+	overflow: hidden;
 }
 
 .rounded-img{
