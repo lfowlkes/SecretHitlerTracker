@@ -1,6 +1,36 @@
 h1{
 	font-family: sans-serif;
+	background-color: #eddca4;
+	color: black;
+	padding: 0px;
+	border: 5px solid black;
+	position: relative;
+	text-align: center;
+	margin-left: 700px;
+	margin-right: 700px;
 }
+
+h2 {
+	font-family: sans-serif;
+	background-color: #800000;
+	color: #eddca4;
+	padding: 0px;
+	border: 5px solid #eddca4;
+	text-align: center;
+	font-size: 40px;
+}
+
+h3 {
+	font-family: sans-serif;
+	background-color: lightBlue;
+	color: white;
+	padding: 0px;
+	border: 3px solid black;
+	text-align: center;
+	margin-left: 1000px;
+	margin-right: 1000px;
+}
+
 
 body {
 	text-align: center;
@@ -17,10 +47,11 @@ p.description{
 	margin-top: 100px;
 	text-align: left;
 	padding: 5px;
-	border: 2px solid black;
+	border: 5px solid black;
 	border-radius: 5px;
-	background: lightGrey;
+	background: lightBlue;
 	max-width: 800px;
+	color: black;
 }
 
 .game-log-holder{
@@ -44,6 +75,8 @@ p.description{
 	overflow-y: scroll;
 	height: 690px;
 	width: 350px;
+	background-color: #800000;
+	color: #eddca4;
 }
 
 canvas {
