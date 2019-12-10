@@ -172,12 +172,12 @@ html {
 	padding: 10px;
 	background-color: #bbbbbb;
 	color: black;
+	transform: rotateY(180deg);
 }
 
 .info-card-back {
 	padding: 0px;
 	background-color: white;
-	transform: rotateY(180deg);
 	overflow: hidden;
 }
 
