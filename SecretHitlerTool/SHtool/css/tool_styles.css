@@ -6,8 +6,9 @@ h1{
 	border: 5px solid black;
 	position: relative;
 	text-align: center;
-	margin-left: 700px;
-	margin-right: 700px;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 500px;
 }
 
 h2 {
@@ -27,8 +28,9 @@ h3 {
 	padding: 0px;
 	border: 3px solid black;
 	text-align: center;
-	margin-left: 1000px;
-	margin-right: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 100px;
 }
 
 
